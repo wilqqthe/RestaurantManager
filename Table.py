@@ -52,3 +52,6 @@ print("All tables")
 Table.listTables()
 print("All free tables")
 Table.listFreeTables()
+
+
+# test 
