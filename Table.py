@@ -10,7 +10,7 @@ class Table:
         self.occupied = False
 
     def setOccupation(self):
-        self.occupied = True
+        self.occupied = not self.occupied
 
     def getOccupation(self):
         return self.occupied
