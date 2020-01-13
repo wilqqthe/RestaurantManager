@@ -6,8 +6,8 @@ tables = db.table("Tables")
 
 tableArray = []
 
-class Table:
 
+class Table:
     tableCounter = 0
 
     def __init__(self, seats, mode="manual"):
@@ -30,6 +30,11 @@ class Table:
         else:
             tables.insert({"No": self.tableNo, "Seats": self.seats})
             print("Table no. {} has been created.".format(self.tableNo))
+
+
+
+    def printToOrder(self):
+        return "Table No: {}\n".format(self.tableNo)
 
     # def deleteFromDB(self):
     #     tables.insert({"No": self.tableNo, "Seats": self.seats})

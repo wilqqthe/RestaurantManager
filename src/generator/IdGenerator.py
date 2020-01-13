@@ -1,11 +1,18 @@
 from tinydb import Query
 
-from src.globalVariables import db
+from src.globalVariables.globalVariables import db
 
 
-class GlobalIdGenerator:
+class IdGenerator:
+    orderID = 0
+
     @classmethod
-    def getId(cls):
+    def getOrderID(cls):
+        cls.orderID += 1
+        return cls.orderID
+
+    @classmethod
+    def getGlobalId(cls):
         try:
             total_id = db.table("GlobalIdGenerator").get(Query().total_id)['total_id']
         except:
