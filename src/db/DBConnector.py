@@ -29,8 +29,3 @@ class DBConnector(ABC):
 
     def deleteFromDB(self):
         db.table(type(self).__name__).remove(where(no) == self.no)
-
-    # @classmethod
-    # @abstractmethod
-    # def loadFromDB(cls):
-    #     pass

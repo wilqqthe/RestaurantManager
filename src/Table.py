@@ -1,6 +1,6 @@
 from tinydb import TinyDB, where
 
-db = TinyDB('db.json')
+from src.globalVariables.globalVariables import db
 
 tables = db.table("Tables")
 

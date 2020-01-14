@@ -1,9 +1,6 @@
 import copy
 
-from src.Table import Table
 from src.generator.IdGenerator import IdGenerator
-from src.menuPositions.Drink import Drink
-from src.menuPositions.Food import Food
 
 
 class Order:
@@ -13,6 +10,7 @@ class Order:
         self.ordered_food = copy.deepcopy(ordered_food)
         self.ordered_drinks = copy.deepcopy(ordered_drinks)
         self.notes = notes
+        self.paid = False
 
     def __str__(self):
         return ''.join(['' + el.printToOrder() for el in self.tables + self.ordered_food + self.ordered_drinks])
@@ -22,21 +20,23 @@ class Order:
             if not table.occupied:
                 table.setOccupation()
 
-    def summaryOrder(self):
-        return sum(float(food.price) for food in self.ordered_food + self.ordered_drinks)
+    def setPaidStatus(self):
+        self.paid = True
 
+    def sumUpOrder(self):
+        return format(sum(float(food.calculateBruttoPrice()) for food in self.ordered_food + self.ordered_drinks), '.2f')
 
-table = []
-foods = []
-drink = []
-table.append(Table(4))
-foods.append(Food('Margetira', 12.00, 'Pizza'))
-foods.append(Food('Carbonara', 8.00, 'Pasta'))
-foods.append(Food('Donner kebab', 3.50, 'Kebab'))
+    def sumUpNettoOrder(self):
+        return format(sum(float(food.getNettoPrice()) for food in self.ordered_food + self.ordered_drinks), '.2f')
 
-drink.append(Drink('Tequila', 4.12))
-drink.append(Drink('Coke', 3))
+    def printToBill(self):
+        return ''.join(['' + el.printToBill() for el in self.ordered_food + self.ordered_drinks])
 
-x = Order(table, foods, drink)
-
-print(x)
+    def positionCounter(self):
+        positions = {}
+        for el in self.ordered_drinks + self.ordered_food:
+            if el.name in positions.keys():
+                positions[el.name] += 1
+            else:
+                positions[el.name] = 1
+        return positions
