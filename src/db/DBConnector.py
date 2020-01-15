@@ -3,12 +3,16 @@ from abc import ABC, abstractmethod
 from tinydb import where, Query
 
 from src.generator.IdGenerator import IdGenerator
-from src.globalVariables.globalVariables import no, db
+from src.globalVariables.globalVariables import db
 
 
 class DBConnector(ABC):
-    def __init__(self):
-        self.no = IdGenerator.getGlobalId()
+    def __init__(self, no: int):
+        if no == 0:
+            self.no = IdGenerator.getGlobalId()
+        else:
+            self.no = no
+
 
     def getVariables(self):
         return [attr for attr in dir(self)
@@ -28,4 +32,9 @@ class DBConnector(ABC):
         db.purge_table(type(self).__name__)
 
     def deleteFromDB(self):
-        db.table(type(self).__name__).remove(where(no) == self.no)
+        db.table(type(self).__name__).remove(where('no') == self.no)
+
+    @classmethod
+    @abstractmethod
+    def loadElementsFromDB(cls):
+        pass

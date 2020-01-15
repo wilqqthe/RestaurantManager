@@ -4,8 +4,8 @@ from src.db.DBConnector import DBConnector
 
 
 class BasePosition(DBConnector, ABC):
-    def __init__(self, name: str, price: float, tax_rate: int):
-        super().__init__()
+    def __init__(self, name: str, price: float, tax_rate: int, no: int):
+        super().__init__(no)
         self.name = self.setName(name)
         self.nettoPrice = self.setPrice(price)
         self.tax_rate = self.setTaxRate(tax_rate)
@@ -46,3 +46,9 @@ class BasePosition(DBConnector, ABC):
     @abstractmethod
     def __str__(self):
         pass
+
+    @classmethod
+    @abstractmethod
+    def prepareAndCreateNew(cls, no: int = 0):
+        pass
+

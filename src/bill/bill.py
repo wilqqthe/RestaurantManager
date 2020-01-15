@@ -2,10 +2,11 @@ import copy
 from collections import Counter
 from datetime import date
 
+from src.payment.cash import Cash
 
-class Bill():
+
+class Bill:
     def __init__(self, order: list, payment_method: str):
-        super().__init__()
         self.orders = copy.deepcopy(order)
         self.today = date.today()
         self.payment_method = payment_method
@@ -18,8 +19,16 @@ class Bill():
         return positionsWithAmount
 
     def printBill(self):
-        position = ''
         no = 0
+        totalBill = position = ''
+        payment_method = "Payment method: {:>50}".format(self.payment_method)
+        header = '{:4}{:25}{:8}{:8}{:6}{:9}{}\n'.format('No.',
+                                                        'Product name',
+                                                        'Piece',
+                                                        'Amount',
+                                                        'Netto',
+                                                        'Tax rate',
+                                                        'Brutto')
         for product, amount in self.positionsWithAmount.items():
             no += 1
             position += "{}.  {:15}{:>15}{:>8}{:>8}{:>8}{:>8}\n".format(no,
@@ -30,12 +39,10 @@ class Bill():
                                                                         self.getDetails('tax', product, amount),
                                                                         self.getDetails('brutto', product, amount))
 
-            totalBill = "{}{:>16}".format(format(sum(float(order.sumUpNettoOrder()) for order in self.orders), '.2f'),
-                                          format(sum(float(order.sumUpOrder()) for order in self.orders)), '.2f')
+            totalBill = "Total amount: {:>36}{:>16}\n".format(format(self.getNettoBill(), '.2f'),
+                                                              format(self.getBruttoBill(), '.2f'))
 
-        print('No\tProduct Name\t\t\tPiece\tAmount\t Netto\tTax rate\tBrutto')
-        print(position)
-        print(totalBill)
+        print(header + position + totalBill + payment_method)
 
     def getDetails(self, detail, product, amount: int):
         for order in self.orders:
@@ -47,3 +54,20 @@ class Bill():
                         return str(position.tax_rate) + '%'
                     elif detail == 'brutto':
                         return position.calculateBruttoPrice(amount)
+
+    def getNettoBill(self):
+        return sum(float(order.sumUpNettoOrder()) for order in self.orders)
+
+    def getBruttoBill(self):
+        return sum(float(order.sumUpOrder()) for order in self.orders)
+
+    def makePayment(self):
+        if self.payment_method == 'Cash':
+            Cash.addCardPayment(self.getBruttoBill())
+        elif self.payment_method == 'Card':
+            Cash.addCardPayment(self.getBruttoBill())
+
+        for order in self.orders:
+            for table in order:
+                if table.occupied:
+                    table.setOccupation()

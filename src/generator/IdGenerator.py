@@ -5,6 +5,12 @@ from src.globalVariables.globalVariables import db
 
 class IdGenerator:
     orderID = 0
+    tableNo = 0
+
+    @classmethod
+    def getTableNo(cls):
+        cls.tableNo += 1
+        return cls.tableNo
 
     @classmethod
     def getOrderID(cls):

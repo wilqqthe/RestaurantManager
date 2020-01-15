@@ -1,26 +1,25 @@
-from src.Table import *
-from src.bill.bill import Bill
-from src.menuPositions.Drink import Drink
-from src.menuPositions.Food import Food
-from src.order.Order import Order
+import os
+import sys
 
-table = []
-foods = []
-drink = []
-table.append(Table(4))
-foods.append(Food('Margetira', 12.00, 23, 'Pizza'))
-foods.append(Food('Carbonara', 8.00, 23, 'Pasta'))
-foods.append(Food('Donner kebab', 3.50, 23, 'Kebab'))
+from src.Table.tableMenuOperations import tableMenu
+from src.menuPositions.menuOperations import editMenuPositions
 
-drink.append(Drink('Tequila', 4.12, 23))
-drink.append(Drink('Coke', 3, 23))
+menuCategories = "1. Add tables\n2. Edit menu positions\n3. Work day\n4. EXIT"
 
+while True:
+    os.system('cls')
+    print(menuCategories)
+    try:
+        menu = int(input("Your choose: "))
+    except:
+        menu = 0
+        print('Must be number 1-4')
 
-x = []
-
-x.append(Order(table, foods, drink))
-x.append(Order(table, foods, drink))
-
-
-bill = Bill(x, 'card')
-bill.printBill()
+    if menu == 1:
+        tableMenu()
+    elif menu == 2:
+        editMenuPositions()
+    elif menu == 3:
+        pass
+    elif menu == 4:
+        sys.exit()

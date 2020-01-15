@@ -1,1 +1,16 @@
-{"_default": {}, "Tables": {"1": {"No": 1, "Seats": 4}}, "GlobalIdGenerator": {"1": {"total_id": 944}}, "Bill": {}}
+{
+  "_default": {},
+  "GlobalIdGenerator": {
+    "1": {
+      "total_id": 2
+    }
+  },
+  "Table": {
+    "1": {
+      "no": 1,
+      "occupied": false,
+      "seats": 3,
+      "tableNo": 1
+    }
+  }
+}
