@@ -6,31 +6,54 @@ from src.globalVariables.globalVariables import db, SimplyException
 
 
 class Table(DBConnector, ABC):
-    def __init__(self, seats: int, tableNo: int = 0,  no: int = 0):
+    def __init__(self, seats: int, tableNo: int = 0, occupied: int = 0, no: int = 0):
         super().__init__(no)
-        if tableNo == 0 : self.tableNo = IdGenerator.getTableNo()
-        else: self.tableNo = tableNo
-        self.occupied = False
+        if tableNo == 0:
+            self.tableNo = IdGenerator.getTableNo()
+        else:
+            self.tableNo = tableNo
+        if occupied == 0:
+            self.occupied = False
+        else:
+            self.occupied = True
         self.seats = seats
 
     def setOccupation(self):
         self.occupied = not self.occupied
+        self.upsertInDB()
 
     def __str__(self):
         return "Table No: {:<5} Number of seats {:<5} Occupied?{:2}".format(self.tableNo,
                                                                             self.seats,
                                                                             self.occupied)
 
+    def printToOrder(self):
+        return "Table No: {}\n".format(self.tableNo)
+
     @classmethod
-    def loadElementsFromDB(cls):
+    def loadElementsFromDB(cls, flag: str = 'ALL'):
         tables = []
         if len(db.table("Table")) == 0:
             print("No entries for food positions in Database")
         else:
             for position in db.table("Table"):
-                tables.append(Table(position["seats"],
-                                    position["tableNo"],
-                                    position["no"]))
+                if flag == 'OCC':
+                    if position["occupied"]:
+                        tables.append(Table(position["seats"],
+                                            position["tableNo"],
+                                            position["occupied"],
+                                            position["no"]))
+                elif flag == 'FREE':
+                    if not position["occupied"]:
+                        tables.append(Table(position["seats"],
+                                            position["tableNo"],
+                                            position["occupied"],
+                                            position["no"]))
+                elif flag == 'ALL':
+                    tables.append(Table(position["seats"],
+                                        position["tableNo"],
+                                        position["occupied"],
+                                        position["no"]))
         return tables
 
     @classmethod

@@ -4,6 +4,8 @@ from src.generator.IdGenerator import IdGenerator
 
 
 class Order:
+    orderList = list()
+
     def __init__(self, tables: list, ordered_food=[], ordered_drinks=[], notes: str = ''):
         self.orderNo = IdGenerator.getOrderID()
         self.tables = copy.deepcopy(tables)
@@ -11,6 +13,7 @@ class Order:
         self.ordered_drinks = copy.deepcopy(ordered_drinks)
         self.notes = notes
         self.paid = False
+        self.setTableOccupied()
 
     def __str__(self):
         return ''.join(['' + el.printToOrder() for el in self.tables + self.ordered_food + self.ordered_drinks])
@@ -24,7 +27,8 @@ class Order:
         self.paid = True
 
     def sumUpOrder(self):
-        return format(sum(float(food.calculateBruttoPrice()) for food in self.ordered_food + self.ordered_drinks), '.2f')
+        return format(sum(float(food.calculateBruttoPrice()) for food in self.ordered_food + self.ordered_drinks),
+                      '.2f')
 
     def sumUpNettoOrder(self):
         return format(sum(float(food.getNettoPrice()) for food in self.ordered_food + self.ordered_drinks), '.2f')
@@ -40,3 +44,23 @@ class Order:
             else:
                 positions[el.name] = 1
         return positions
+
+    @classmethod
+    def addToOrderList(cls, order):
+        cls.orderList.append(order)
+
+    @classmethod
+    def removeFromOrderList(cls, index):
+        cls.orderList.pop(index)
+
+    @classmethod
+    def printAllOrders(cls):
+        for i, order in enumerate(cls.orderList):
+            print("{}. {}".format(i + 1, order))
+            print('\n')
+
+    @classmethod
+    def getOrderByOrderNo(cls, orderNo: int):
+        for order in cls.orderList:
+            if orderNo == order.orderNo:
+                return order

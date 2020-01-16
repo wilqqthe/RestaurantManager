@@ -53,7 +53,7 @@ def editFoodPositions():
 
 def editDrinkPositions():
     os.system('cls')
-    print("1. Add new\n2. Edit existing\n3. Delete\n4. EXIT")
+    print("1. Add new\n2. Edit existing\n3. Delete\n4. Back")
     try:
         menu = int(input("Your choose: "))
     except:
@@ -112,7 +112,7 @@ def showAllPositions():
 def editMenuPositions():
     while True:
         os.system('cls')
-        print("1. Edit/delete food\n2. Edit/delete drinks\n3. Show all\n4. EXIT")
+        print("1. Edit/delete food\n2. Edit/delete drinks\n3. Show all\n4. Back")
         try:
             menu = int(input("Your choose: "))
         except:

@@ -24,7 +24,7 @@ def deleteTable():
 def tableMenu():
     while True:
         os.system('cls')
-        print("1. Add new table\n2. Delete table\n3. Show all\n4. EXIT")
+        print("1. Add new table\n2. Delete table\n3. Show all\n4. Back")
         try:
             menu = int(input("Your choose: "))
         except:
@@ -44,4 +44,3 @@ def tableMenu():
             Table.listFreeTables()
         elif menu == 4:
             return 0
-

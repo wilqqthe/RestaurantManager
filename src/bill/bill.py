@@ -6,6 +6,8 @@ from src.payment.cash import Cash
 
 
 class Bill:
+    bills = list()
+
     def __init__(self, order: list, payment_method: str):
         self.orders = copy.deepcopy(order)
         self.today = date.today()
@@ -66,8 +68,10 @@ class Bill:
             Cash.addCardPayment(self.getBruttoBill())
         elif self.payment_method == 'Card':
             Cash.addCardPayment(self.getBruttoBill())
-
         for order in self.orders:
-            for table in order:
+            order.paid = True
+            for table in order.tables:
                 if table.occupied:
                     table.setOccupation()
+
+
